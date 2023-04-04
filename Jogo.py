@@ -24,15 +24,8 @@ class Jogo():
         return True
     
     def game_loop(self):
-        pin = 0
-        a = 0.5
         while self.atualiza():
-            pin += a
-            # if pin > 360:
-            #     a = -0.5
-            # if pin < -360:
-            #     a =0.5
-            self.tela_atual.desenha(self.screen, pin)
+            self.tela_atual.desenha(self.screen)
             pygame.display.update()
     
     def finaliza(self):

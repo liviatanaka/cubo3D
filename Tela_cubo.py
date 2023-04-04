@@ -1,83 +1,42 @@
 import pygame
 from constantes import *
 import numpy as np
+from Cubo import Cubo
 
 class Tela_cubo():
     
     def __init__(self):
         self.pa = 0
+        self.cubo = Cubo()
+        self.ang = 0
+        self.ang_x = 0
+        self.vel = 1
+        self.d = 400
 
     def atualiza(self):
+
+        self.ang += self.vel
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None
+            if event.type == pygame.KEYDOWN:
+                if event.type == pygame.K_i:
+                    pass
+                if event.key == pygame.K_RIGHT:
+                    self.ang_x += self.vel
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4:  # zoom in
+                    self.d *= 1.1
+                elif event.button == 5:  # zoom out
+                    self.d /= 1.1
         
         return self
 
-    def desenha(self, screen, pin):
-        # objeto = np.array([-1, -1, -1, 1])
-        # for x in (-1, 1):
-        #     for y in (-1, 1):
-        #         for z in (-1, 1):
-        #             if x == -1 and y == -1 and z == -1:
-        #                 continue
-        #             objeto = np.vstack((objeto, np.array([x, y, z, 1])))
-        objeto = np.array([[-1, -1, -1, 1],
-                           [ 1, -1, -1, 1],
-                           [ 1,  1, -1, 1],
-                           [-1,  1, -1, 1],
-                           [-1, -1,  1, 1],
-                           [ 1, -1,  1, 1],
-                           [ 1,  1,  1, 1],
-                           [-1,  1,  1, 1]])
-
-        # objeto = np.array([[-1, -1, 2, 1],
-        #             [ 1, -1, 2, 1],
-        #             [ 1,  1, 2, 1],
-        #             [-1,  1, 2, 1],
-        #             [-1, -1,  4, 1],
-        #             [ 1, -1,  4, 1],
-        #             [ 1,  1,  4, 1],
-        #             [-1,  1,  4, 1]])
+    def desenha(self, screen):
         
-
-        theta = np.radians(pin)
-        R_x = np.array([[1, 0, 0, 0],
-                      [0, np.cos(theta), -np.sin(theta), 0],
-                      [0, np.sin(theta), np.cos(theta), 0],
-                      [0, 0, 0, 1]])
-        R_y = np.array([[np.cos(theta), 0, np.sin(theta), 0],
-                      [0, 1, 0, 0],
-                      [-np.sin(theta), 0,  np.cos(theta), 0],
-                      [0, 0, 0, 1]])
-        R_z = np.array([[np.cos(theta), -np.sin(theta), 0, 0],
-                      [np.sin(theta),np.cos(theta), 0 , 0],
-                      [0, 0, 1, 0],
-                      [0, 0, 0, 1]])
-        T = np.array([[1, 0, 0, 0], 
-                      [0, 1, 0, 0], 
-                      [0, 0, 1, 4],
-                      [0, 0, 0, 1]]) 
-        # T_ = np.array([[1, 0, 0, 0], 
-        #             [0, 1, 0, 0], 
-        #             [0, 0, 1, -4],
-        #             [0, 0, 0, 1]]) 
-        objeto = objeto.T
-        R = T @ R_x @ R_y @ R_z 
-        objeto = R @ objeto
-
-        d= 200
-        P = np.array([[1, 0, 0, 0], 
-                      [0, 1, 0, 0], 
-                      [0, 0, 0, -d], 
-                      [0, 0, (-1/d), 0] ]) 
-        projecao = P @ objeto 
-
-        xp = projecao[0,:]/ projecao[3,:]
-        yp = projecao[1,:]/ projecao[3,:]
-
-
+        objeto_rotacionado = self.cubo.rotacao_cubo(self.ang)
+        xp, yp = self.cubo.projecao_cubo(self.d, objeto_rotacionado)
 
         # desenho ##########################################################################################################
         
@@ -86,7 +45,6 @@ class Tela_cubo():
         i = 0
         while i < len(aresta):
             x = aresta[i]
-            # print((xp[x[0]] + WIDTH//2, yp[x[0]] + HEIGHT//2))
             pygame.draw.line(screen, AZUL, (xp[x[0]] + WIDTH//2, yp[x[0]] + HEIGHT//2), (xp[x[1]] + WIDTH//2, yp[x[1]] + HEIGHT//2), 5)
             i += 1
 
@@ -95,5 +53,5 @@ class Tela_cubo():
             x = xp[i]
             y = yp[i]
             pygame.draw.circle(screen, VERM, (x +WIDTH//2, y + HEIGHT//2), 5)
-            # print((x +WIDTH//2, y + HEIGHT//2))
+
             i += 1
