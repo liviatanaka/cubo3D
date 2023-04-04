@@ -1,6 +1,5 @@
 import pygame
 from constantes import *
-import numpy as np
 from Cubo import Cubo
 
 class Tela_cubo():
@@ -42,12 +41,12 @@ class Tela_cubo():
             if event.type == pygame.QUIT:
                 return None
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
+                if event.key == pygame.K_1:
                     self.modo = "padrao"
-                if event.key == pygame.K_c:
+                if event.key == pygame.K_2:
                     self.modo = "controle"
                 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN: 
                 if event.button == 4:  # zoom in
                     self.d *= 1.1
                 elif event.button == 5:  # zoom out
@@ -56,17 +55,17 @@ class Tela_cubo():
 
         if self.modo == "controle":
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_w]:
+            if keys[pygame.K_w]: 
                 self.angulos["x"] += self.vel
-            if keys[pygame.K_s]:
+            if keys[pygame.K_s]: 
                 self.angulos["x"] -= self.vel
-            if keys[pygame.K_d]:
+            if keys[pygame.K_d]: 
                 self.angulos["y"] += self.vel
             if keys[pygame.K_a]:
                 self.angulos["y"] -= self.vel
-            if keys[pygame.K_q]:
+            if keys[pygame.K_q]: 
                 self.angulos["z"] += self.vel
-            if keys[pygame.K_e]:
+            if keys[pygame.K_e]: 
                 self.angulos["z"] -= self.vel
 
         return self
