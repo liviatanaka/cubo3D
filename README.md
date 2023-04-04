@@ -5,9 +5,9 @@ APS 4 - Álgebra Linear e Teoria da Informação - 2021.1
 ## Introdução
 
 # Gif do jogo
-[![Cubo 3D | Gif demonstrativo](https://img.youtube.com/vi/pZrxTLAaeHY/0.jpg)](https://www.youtube.com/watch?v=pZrxTLAaeHY)
+![Cubo 3D | Gif demonstrativo]()
 * **Descrição:** Gif demonstrativo do Cubo 3D
-* **Link:** https://youtu.be/pZrxTLAaeHY
+* **Link:** 
 
 ## Integrantes do grupo
 * [Isabelle da Silva Santos](https://github.com/isabelleatt)
