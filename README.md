@@ -1,24 +1,24 @@
-# cubo3D
+# Cubo 3D
 
 APS 4 - Álgebra Linear e Teoria da Informação - 2021.1
 
 O "Cubo 3D" é um programa desenvolvido para a disciplina de Álgebra Linear e Teoria da Informação, ministrada pelo professor Tiago Fernandes Tavares. O modelo implementado é um modelo gráfico que consiste em um cubo no espaço tridimensional que pode ser rotacionado e projetado em uma cena bidimensional através de uma projeção perspectiva. O modelo foi implementado em Python utilizando a biblioteca Pygame para a renderização gráfica.
 
-## Introdução
-
-# Gif do jogo
-![Cubo 3D | Gif demonstrativo]()
-* **Descrição:** Gif demonstrativo do Cubo 3D
-* **Link:** 
-
 ## Integrantes do grupo
 * [Isabelle da Silva Santos](https://github.com/isabelleatt)
 * [Livia Tanaka](https://github.com/liviatanaka)
 
+## Introdução
+
+### Gif do jogo
+![Cubo 3D | Gif demonstrativo]()
+* **Descrição:** Gif demonstrativo do Cubo 3D
+* **Link:** 
+
 ## Descrição do projeto
 
-# Instruções de Dowload
-## Clonando um Repositório
+### Instruções de Dowload
+### Clonando um Repositório
 Primeiramente, navegue para o diretório aonde você gostaria de clonar o repositório usando comandos como:
 *  cd: para mudar de diretório 
 * cd ../ para voltar um nível do diretório <br>
@@ -29,19 +29,22 @@ Para clonar um repositório, siga as instruções em: <br>
 
 Para clonar o repositório pelo terminal, você pode usar o seguinte comando: <br>
 ```
-git clone https://github.com/liviatanaka/cubo3D.git
+    git clone https://github.com/liviatanaka/cubo3D.git
 ```
 
 Agora, você poderá acessar os arquivos recém baixados com os comandos *cd* e *ls*
 
 ## Instalando o necessário
 É necessário realizar algumas breves instalações para utilizar o código, isso pode ser realizada de forma simples usando o comando: <br>
-**pip install pygame**
+```
+    pip install pygame
+```
 
 ## Rodando o programa
 Para rodar o programa é necessário executar o arquivo main.py, podendo o mesmo ser realizado pela ferramente no topo superior direito do Visual Studio code ou usando o seguinte comando: <br>
-**python main.py**
-
+```
+    python main.py
+```
 
 ## Descrição Matemática
 
