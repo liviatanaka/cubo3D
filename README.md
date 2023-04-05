@@ -124,9 +124,7 @@ $$
 
 Esse sistema pode ser representado por meio de matrizes da seguinte forma:
 
-
 $$
-
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
 0 & 1 & 0 & 0 \\
@@ -147,7 +145,6 @@ Y_pW_p \\
 Z_p \\
 W_p
 \end{bmatrix}
-
 $$
 
 $$
