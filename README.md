@@ -136,8 +136,7 @@ X_0 \\
 Y_0 \\
 Z_0 \\
 1
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 X_pW_p \\
 Y_pW_p \\
