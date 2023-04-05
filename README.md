@@ -131,7 +131,6 @@ $$
 0 & 0 & 0 & -d \\
 0 & 0 & -\frac{1}{d} & 0
 \end{bmatrix}
-
 \begin{bmatrix}
 X_0 \\
 Y_0 \\
