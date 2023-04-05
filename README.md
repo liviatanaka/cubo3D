@@ -68,6 +68,105 @@ O modelo permite a rotação e a projeção do cubo em tempo real por meio de in
 | Scroll para cima | Aumenta a distância focal |
 | Scroll para baixo | Diminui a distância focal |
 
+## Projeção do cubo 3D em duas dimensões
+
+Para realizar a projeção de um objeto de três dimensões em um de apenas duas, é preciso descobrir os pontos $X_p$ e $Y_p$ correspondentes a cada uma das coordenas $(X, Y, Z)$ que, no caso, são as arestas do cubo.
+
+![imagem](projecao1.png)
+* $(X,Z)$ → coordenadas originais do objeto
+* $(X_p, Z_p)$ → coordenadas da projeção do ponto $(X, P)$
+* $d$ → distância focal
+
+Na imagem acima foi considerado que o plano y está fixo para poder visualizar a projeção dos pontos $X$ e $Z$ no anteparo. Nessas condições é possível calcular o Xp e o Zp da seguinte forma:
+
+1. Como $d$ é a distância entre o eixo x e o anteparo e a coordenada $Z_p$ está em cima do anteparo,
+
+$$
+Z_p = - d
+$$
+
+2. Tendo em vista que o ângulo $\theta$ é o mesmo de ambos os lados, já que são opostos pelo véritce, é possível aplicar a semelhança de triângulos para descobrir o valor de $X_p$
+
+$$
+tg_\theta = \frac{X_0}{Z_0} = \frac{X_p}{Z_p} \\
+$$
+
+$$
+X_p = \frac{X_0 * Z_p}{Z_0} = -\frac{X_0 * d}{Z_0}
+$$
+
+Como queremos realizar essa transformação por meio de matrizes, precisamos de mais uma variável para aplicar a multiplicação já que não é possível efetuar a divisão para descobrir $X_p$ apenas com multiplicação matricial.
+
+Vamos chamar essa variável de $W_p$, para que 
+
+$$
+X_pW_p = X_0
+$$
+
+,ou seja, 
+
+$$
+W_p = -\frac{Z_0}{d}
+$$
+
+Com as equações encontradas até o momento, podemos encontrar o ponto $X_p$ da projeção. Seguindo a mesma lógica também podemos encontrar o ponto $Y_p$ da equação tendo em vista que poderiamos simular a mesma situação da imagem, porém com o eixo $X$ fixo. Isso é possível, pois as alterações no eixo y não afetam o $X_p$ e vice-versa.
+
+Logo, temos o seguinte sistema de equações:
+
+$$
+\begin{cases}
+Z_p = - d \\
+X_pW_p = X_0 \\
+Y_pW_p = Y_0 \\
+W_p = -\frac{Z_0}{d}
+\end{cases}
+$$
+
+Esse sistema pode ser representado por meio de matrizes da seguinte forma:
 
 
+$$
 
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 0 & -d \\
+0 & 0 & -\frac{1}{d} & 0
+\end{bmatrix}
+
+\begin{bmatrix}
+X_0 \\
+Y_0 \\
+Z_0 \\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+X_pW_p \\
+Y_pW_p \\
+Z_p \\
+W_p
+\end{bmatrix}
+
+$$
+
+$$
+PI = F
+$$
+
+Por fim, para decobrir o valor de $X_p$ e $Y_p$ basta dividir ambos por $W_p$
+
+### **No código**
+A função `projecao_cubo` realiza a multiplicação matricial do matriz de projeção demonstrada acima e a matriz do objeto (já rotacionado) e, em seguida, realiza a divisão da primeira linha pela quarta para encontrar $X_p$ e da segunda pela quarta para encontrar $Y_p$.
+```
+def projecao_cubo(self, d, objeto_rotacionado):
+    P = np.array([[1, 0, 0, 0], 
+                [0, 1, 0, 0], 
+                [0, 0, 0, -d], 
+                [0, 0, (-1/d), 0] ]) 
+    projecao = P @ objeto_rotacionado
+
+    xp = projecao[0,:]/ projecao[3,:]
+    yp = projecao[1,:]/ projecao[3,:]
+return xp, yp
+```
