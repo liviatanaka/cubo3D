@@ -157,7 +157,7 @@ $$
 Por fim, para decobrir o valor de $X_p$ e $Y_p$ basta dividir ambos por $W_p$
 
 ### **No código**
-A função `projecao_cubo` realiza a multiplicação matricial do matriz de projeção demonstrada acima e a matriz do objeto (já rotacionado) e, em seguida, realiza a divisão da primeira linha pela quarta para encontrar $X_p$ e da segunda pela quarta para encontrar $Y_p$.
+A função `projecao_cubo` realiza a multiplicação matricial do matriz de projeção demonstrada acima e a matriz das arestas (já rotacionadas) e, em seguida, realiza a divisão da primeira linha pela quarta para encontrar $X_p$ e da segunda pela quarta para encontrar $Y_p$.
 ```
 def projecao_cubo(self, d, objeto_rotacionado):
     P = np.array([[1, 0, 0, 0], 
