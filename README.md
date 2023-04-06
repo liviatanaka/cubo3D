@@ -2,24 +2,24 @@
 
 APS 4 - Álgebra Linear e Teoria da Informação - 2021.1
 
-O "Cubo 3D" é um programa desenvolvido para a disciplina de Álgebra Linear e Teoria da Informação, ministrada pelo professor Tiago Fernandes Tavares. O modelo implementado é um modelo gráfico que consiste em um cubo no espaço tridimensional que pode ser rotacionado e projetado em uma cena bidimensional através de uma projeção perspectiva. O modelo foi implementado em Python utilizando a biblioteca Pygame para a renderização gráfica.
-
 ## Integrantes do grupo
 * [Isabelle da Silva Santos](https://github.com/isabelleatt)
 * [Livia Tanaka](https://github.com/liviatanaka)
 
 ## Introdução
 
-### Gif do jogo
-![Cubo 3D | Gif demonstrativo]()
+O "Cubo 3D" é um programa desenvolvido para a disciplina de Álgebra Linear e Teoria da Informação, ministrada pelo professor Tiago Fernandes Tavares. O modelo implementado é um modelo gráfico que consiste em um cubo no espaço tridimensional que pode ser rotacionado e projetado em uma cena bidimensional através de uma projeção perspectiva. O modelo foi implementado em Python utilizando a biblioteca Pygame para a renderização gráfica.
+
+### Gif do Cubo 3D
+
+![Cubo 3D | Gif demonstrativo](cubo3d.gif)
 * **Descrição:** Gif demonstrativo do Cubo 3D
-* **Link:** 
 
 ## Descrição do projeto
 
 ### Instruções de Dowload
-### Clonando um Repositório
-Primeiramente, navegue para o diretório aonde você gostaria de clonar o repositório usando comandos como:
+#### Clonando um Repositório
+Primeiramente, verifique se o Python está instalado em sua máquina e navegue para o diretório aonde você gostaria de clonar o repositório usando comandos como:
 *  cd: para mudar de diretório 
 * cd ../ para voltar um nível do diretório <br>
 
@@ -34,13 +34,13 @@ Para clonar o repositório pelo terminal, você pode usar o seguinte comando: <b
 
 Agora, você poderá acessar os arquivos recém baixados com os comandos *cd* e *ls*
 
-## Instalando o necessário
+#### Instalando o necessário
 É necessário realizar algumas breves instalações para utilizar o código, isso pode ser realizada de forma simples usando o comando: <br>
 ```
     pip install pygame
 ```
 
-## Rodando o programa
+#### Rodando o programa
 Para rodar o programa é necessário executar o arquivo main.py, podendo o mesmo ser realizado pela ferramente no topo superior direito do Visual Studio code ou usando o seguinte comando: <br>
 ```
     python main.py
@@ -168,3 +168,109 @@ def projecao_cubo(self, d, objeto_rotacionado):
     yp = projecao[1,:]/ projecao[3,:]
 return xp, yp
 ```
+
+## Rotação do cubo 3D
+
+Para realizar a rotação de um objeto tridmensional, é preciso realizar a multiplicação matricial da matriz de rotação e a matriz das arestas. Para isso, é preciso descobrir a matriz de rotação para cada eixo.
+
+### Matriz de rotação em torno do eixo x
+
+$$
+R_x = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & \cos(\theta) & -\sin(\theta) & 0 \\
+0 & \sin(\theta) & \cos(\theta) & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\hspace{0.5in}
+$$
+
+onde $(\theta)$ é o ângulo de rotação em torno do eixo x.
+
+### Matriz de rotação em torno do eixo y
+
+$$
+R_y = \begin{bmatrix}
+\cos(\theta) & 0 & \sin(\theta) & 0 \\
+0 & 1 & 0 & 0 \\
+-\sin(\theta) & 0 & \cos(\theta) & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\hspace{0.5in}
+$$
+
+onde $(\theta)$ é o ângulo de rotação em torno do eixo y.
+
+
+### Matriz de rotação em torno do eixo z
+
+$$
+R_z = \begin{bmatrix}
+\cos(\theta) & - \sin(\theta) & 0 & 0 \\
+\sin(\theta) & \cos(\theta) & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+onde $(\theta)$ é o ângulo de rotação em torno do eixo z.
+
+Então, a matriz de transformação de rotação geral pode ser obtida multiplicando-se as matrizes de rotação nas ordens corretas, como:
+
+$$
+R = R_xR_yR_z
+$$
+
+* Lembre-se que a multiplicação matricial não é cumulativa, ou seja, a ordem em que as matrizes são multiplicadas é importante.
+
+
+### **No código**
+
+A função `rotacao_cubo` realiza a multiplicação matricial da matriz de rotação e a matriz das arestas. Para isso, é preciso descobrir a matriz de rotação para cada eixo. A função `matriz_rotacao_x`, `matriz_rotacao_y` e `matriz_rotacao_z` retornam a matriz de rotação em torno do eixo x, y e z, respectivamente.
+
+``` 
+    def rotacao_cubo(self, angulos, modo):
+
+        objeto = self.vertices.T
+        T = self.matriz_translacao()
+
+        if modo == "padrao":
+            theta = np.radians(angulos["todos"])
+
+            R_x = self.matriz_rotacao_x(theta)
+            R_y = self.matriz_rotacao_y(theta)
+            R_z = self.matriz_rotacao_z(theta)
+        
+        elif modo == "controle":
+            theta_x = np.radians(angulos["x"])
+            theta_y = np.radians(angulos["y"])
+            theta_z = np.radians(angulos["z"])
+
+            R_x = self.matriz_rotacao_x(theta_x)
+            R_y = self.matriz_rotacao_y(theta_y)
+            R_z = self.matriz_rotacao_z(theta_z)
+
+        R = T @ R_x @ R_y @ R_z 
+        objeto_rotacionado = R @ objeto
+        return objeto_rotacionado
+
+```
+
+## Distância focal 
+
+A distância focal é a distância entre o ponto de projeção e o plano de projeção em uma projeção perspectiva. No código fornecido, a projeção perspectiva é realizada pela função `projecao_cubo`, que recebe como argumentos a distância focal d e o objeto rotacionado `objeto_rotacionado`.
+
+A projeção perspectiva é realizada através da aplicação da matriz de projeção perspectiva nos vértices do objeto rotacionado. A matriz de projeção perspectiva transforma coordenadas tridimensionais em coordenadas bidimensionais de acordo com a distância focal.
+
+A matriz de projeção perspectiva para uma câmera com eixo óptico na origem e plano de projeção z = d é dada por:
+
+``` 
+P = np.array([[1, 0, 0, 0],
+              [0, 1, 0, 0],
+              [0, 0, 1, 0],
+              [0, 0, -1/d, 0]])
+```
+
+Essa matriz é multiplicada pela matriz de transformação do objeto rotacionado para gerar a matriz de projeção final. A projeção perspectiva é aplicada na multiplicação final da matriz de transformação e a matriz de projeção perspectiva.
+
+O resultado da projeção perspectiva é uma lista de coordenadas bidimensionais de cada ponto do objeto rotacionado. As coordenadas $x$ e $y$ desses pontos são então normalizadas dividindo-se pelas coordenadas homogêneas para transformá-las em coordenadas de tela que podem ser desenhadas na tela.
