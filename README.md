@@ -209,13 +209,15 @@ Então, a matriz de transformação de rotação geral pode ser obtida multiplic
 
 T representa a seguinte matriz de translação no eixo z:
 
-```
-    T = np.array([[1, 0, 0, 0], 
-            [0, 1, 0, 0], 
-            [0, 0, 1, 10],
-            [0, 0, 0, 1]])
+$$
+T = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 10 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
 
-```
 
 A translação é necessária na projeção, para que o cubo seja colocado em frente à câmera (ponto principal), e não sobre o pinhole (posição na qual ele se encontra inicialmente).
 Logo:
