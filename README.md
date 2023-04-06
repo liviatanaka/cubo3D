@@ -37,7 +37,7 @@ Agora, você poderá acessar os arquivos recém baixados com os comandos *cd* e 
 #### Instalando o necessário
 É necessário realizar algumas breves instalações para utilizar o código, isso pode ser realizada de forma simples usando o comando: <br>
 ```
-    pip install pygame
+    pip install pygame, numpy
 ```
 
 #### Rodando o programa
@@ -45,16 +45,6 @@ Para rodar o programa é necessário executar o arquivo main.py, podendo o mesmo
 ```
     python main.py
 ```
-
-## Descrição Matemática
-
-O cubo é representado por uma matriz com os vértices do cubo unitário centrado na origem. As transformações que podem ser aplicadas no cubo são as rotações em torno dos eixos x, y e z e a translação no eixo z.  A projeção perspectiva é realizada através de uma matriz de projeção que transforma as coordenadas do objeto em coordenadas de tela. Essa matriz de projeção é definida no método `projecao_cubo` e é aplicada ao objeto rotacionado para obter as coordenadas de tela do objeto. A distância focal é definida pelo usuário e é usada para calcular a matriz de projeção.
-
-As matrizes de transformação para a rotação em torno dos eixos x, y e z são construídas a partir do ângulo de rotação fornecido pelo usuário. Cada matriz de rotação é uma matriz 4x4 que é aplicada ao vetor de coordenadas do objeto por meio do produto de matrizes. A matriz de rotação é aplicada ao cubo unitário centrado na origem para obter as coordenadas do objeto rotacionado.
-
-A matriz de translação é uma matriz 4x4 que realiza a translação do objeto em relação ao eixo z. Ela é fixa e é sempre aplicada em conjunto com as matrizes de rotação. A matriz de translação é aplicada ao cubo rotacionado para obter as coordenadas do objeto rotacionado e transladado.
-
-A projeção perspectiva é realizada através de uma matriz de projeção que transforma as coordenadas do objeto em coordenadas de tela. Essa matriz de projeção é definida no método projecao_cubo e é aplicada ao objeto rotacionado para obter as coordenadas de tela do objeto. A distância focal é definida pelo usuário e é usada para calcular a matriz de projeção. A matriz de projeção é aplicada ao cubo rotacionado e transladado para obter as coordenadas de tela do objeto.
 
 O modelo permite a rotação e a projeção do cubo em tempo real por meio de interações do usuário com o teclado e a tela. As interações do usuário são implementadas em um loop principal que chama o método de rotação e o método de projeção repetidamente, produzindo a ilusão de movimento do cubo em tempo real. O usuário pode interagir com o programa por meio das seguintes teclas:  <br>
 
@@ -73,7 +63,7 @@ O modelo permite a rotação e a projeção do cubo em tempo real por meio de in
 
 ## Projeção do cubo 3D em duas dimensões
 
-Para realizar a projeção de um objeto de três dimensões em um de apenas duas, é preciso descobrir os pontos $X_p$ e $Y_p$ correspondentes a cada uma das coordenas $(X, Y, Z)$ que, no caso, são as arestas do cubo.
+Para realizar a projeção de um objeto de três dimensões em um de apenas duas, é preciso descobrir os pontos $X_p$ e $Y_p$ correspondentes a cada uma das coordenas $(X, Y, Z)$ que, no caso, são os vértices do cubo.
 
 ![imagem](projecao1.png)
 * $(X,Z)$ → coordenadas originais do objeto
@@ -155,7 +145,7 @@ $$
 Por fim, para decobrir o valor de $X_p$ e $Y_p$ basta dividir ambos por $W_p$
 
 ### **No código**
-A função `projecao_cubo` realiza a multiplicação matricial do matriz de projeção demonstrada acima e a matriz das arestas (já rotacionadas) e, em seguida, realiza a divisão da primeira linha pela quarta para encontrar $X_p$ e da segunda pela quarta para encontrar $Y_p$.
+A função `projecao_cubo` realiza a multiplicação matricial do matriz de projeção demonstrada acima e a matriz dos vértices (já rotacionadas) e, em seguida, realiza a divisão da primeira linha pela quarta para encontrar $X_p$ e da segunda pela quarta para encontrar $Y_p$.
 ```
 def projecao_cubo(self, d, objeto_rotacionado):
     P = np.array([[1, 0, 0, 0], 
@@ -171,7 +161,7 @@ return xp, yp
 
 ## Rotação do cubo 3D
 
-Para realizar a rotação de um objeto tridmensional, é preciso realizar a multiplicação matricial da matriz de rotação e a matriz das arestas. Para isso, é preciso descobrir a matriz de rotação para cada eixo.
+Para realizar a rotação de um objeto tridmensional, é preciso realizar a multiplicação matricial da matriz de rotação e a matriz dos vértices. Para isso, é preciso descobrir a matriz de rotação para cada eixo.
 
 ### Matriz de rotação em torno do eixo x
 
@@ -215,18 +205,34 @@ $$
 
 onde $(\theta)$ é o ângulo de rotação em torno do eixo z.
 
-Então, a matriz de transformação de rotação geral pode ser obtida multiplicando-se as matrizes de rotação nas ordens corretas, como:
+Então, a matriz de transformação de rotação geral pode ser obtida multiplicando-se as matrizes de rotação e translação nas ordens corretas, como:
+
+T representa a seguinte matriz de translação no eixo z:
+
+```
+    T = np.array([[1, 0, 0, 0], 
+            [0, 1, 0, 0], 
+            [0, 0, 1, 10],
+            [0, 0, 0, 1]])
+
+```
+
+A translação é necessária na projeção, para que o cubo seja colocado em frente à câmera (ponto principal), e não sobre o pinhole (posição na qual ele se encontra inicialmente).
+Logo:
 
 $$
-R = R_xR_yR_z
+R = T R_x R_y R_z
 $$
 
-* Lembre-se que a multiplicação matricial não é cumulativa, ou seja, a ordem em que as matrizes são multiplicadas é importante.
+
+Lembre-se: 
+* A multiplicação matricial não é cumulativa, ou seja, a ordem em que as matrizes são multiplicadas é importante;
+* O cubo localiza-se no centro $(0,0,0)$, ou seja, na origem do sistema de coordenadas. 
 
 
 ### **No código**
 
-A função `rotacao_cubo` realiza a multiplicação matricial da matriz de rotação e a matriz das arestas. Para isso, é preciso descobrir a matriz de rotação para cada eixo. A função `matriz_rotacao_x`, `matriz_rotacao_y` e `matriz_rotacao_z` retornam a matriz de rotação em torno do eixo x, y e z, respectivamente.
+A função `rotacao_cubo` realiza a multiplicação matricial da matriz de rotação e a matriz dos vértices. Para isso, é preciso descobrir a matriz de rotação para cada eixo. A função `matriz_rotacao_x`, `matriz_rotacao_y` e `matriz_rotacao_z` retornam a matriz de rotação em torno do eixo x, y e z, respectivamente.
 
 ``` 
     def rotacao_cubo(self, angulos, modo):
@@ -262,7 +268,7 @@ A distância focal é a distância entre o ponto de projeção e o plano de proj
 
 A projeção perspectiva é realizada através da aplicação da matriz de projeção perspectiva nos vértices do objeto rotacionado. A matriz de projeção perspectiva transforma coordenadas tridimensionais em coordenadas bidimensionais de acordo com a distância focal.
 
-A matriz de projeção perspectiva para uma câmera com eixo óptico na origem e plano de projeção z = d é dada por:
+A matriz de projeção perspectiva para uma câmera com eixo óptico na origem e distância focal igual a `d` é dada por:
 
 ``` 
 P = np.array([[1, 0, 0, 0],
@@ -271,6 +277,4 @@ P = np.array([[1, 0, 0, 0],
               [0, 0, -1/d, 0]])
 ```
 
-Essa matriz é multiplicada pela matriz de transformação do objeto rotacionado para gerar a matriz de projeção final. A projeção perspectiva é aplicada na multiplicação final da matriz de transformação e a matriz de projeção perspectiva.
-
-O resultado da projeção perspectiva é uma lista de coordenadas bidimensionais de cada ponto do objeto rotacionado. As coordenadas $x$ e $y$ desses pontos são então normalizadas dividindo-se pelas coordenadas homogêneas para transformá-las em coordenadas de tela que podem ser desenhadas na tela.
+Desse modo, a matriz de projeção converte as coordenadas tridimensionais dos objetos em coordenadas bidimensionais, as quais resultarão na exibição do objeto na tela, apresentando nosso Cubo 3D.

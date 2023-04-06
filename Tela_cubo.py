@@ -13,8 +13,7 @@ class Tela_cubo():
 
         Atributos:
             cubo (Cubo): objeto da classe Cubo, que será renderizado na tela.
-            ang (int): valor inicial é zero, utilizado para a rotação do cubo.
-            ang_x (int): valor inicial é zero, utilizado para a rotação do cubo no eixo x.
+            angulos (dict): dicionário que armazena os ângulos de rotação do cubo em cada eixo.
             vel (int): valor inicial é um, representa a velocidade de rotação do cubo.
             d (int): valor inicial é 400, representa a distância da câmera ao cubo.
         """
@@ -25,6 +24,7 @@ class Tela_cubo():
         self.modo = "padrao"
         # padrão -> rotaciona normal em todos os eixos
         # controle -> rotaciona pelas teclas
+
     def atualiza(self):
         """
         Método que atualiza o ângulo de rotação do cubo e realiza ações do teclado e mouse.
@@ -87,8 +87,10 @@ class Tela_cubo():
         screen.fill(PRETO)
         i = 0
 
+        # são somadas as seguintes variaveis, para posicionar o cubo no centro da tela.
         largura = WIDTH//2
         altura = HEIGHT//2
+        
         while i < len(self.cubo.arestas):
             x = self.cubo.arestas[i]
             # Desenha uma linha entre os dois pontos da aresta e coloca na tela.
